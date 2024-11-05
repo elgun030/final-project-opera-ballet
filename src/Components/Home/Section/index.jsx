@@ -17,7 +17,7 @@ const images = [
     date: "20 - 30 JUNE 2024",
     description: "An overview of the other performance description here.",
   },
-  // Diğer görselleri buraya ekleyebilirsin
+
 ];
 
 const Section = () => {

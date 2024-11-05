@@ -42,6 +42,7 @@ const Rectangle = () => {
         </video>
       </div>
       <div className="bg-white">
+        
         <div className="container mx-auto max-w-[1224px]">
           <div className="flex flex-col sm:flex-row justify-between items-center mt-16 mb-10">
             <div>

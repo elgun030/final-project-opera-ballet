@@ -10,14 +10,14 @@ import Events2 from '../Events2'
 
 const Home = () => {
   return (
-    <div>
-        <Rectangle/>
-        <Section/>
-        <Section2/>
-        <Events/>
-        <Section3/>
-        <Events2/>
-    </div>
+    <div style={{ margin: 0, padding: 0 }}>
+    <Rectangle />
+    <Section />
+    <Section2 />
+    <Events />
+    <Section3 />
+    <Events2 />
+  </div>
   )
 }
 

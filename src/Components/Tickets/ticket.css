@@ -1,192 +1,194 @@
-body {
-    font-family: 'Montserrat', sans-serif;
-    margin: 0;
-    padding: 0;
+.tickets-container {
+  display: grid; /* Grid düzeni */
+  grid-template-columns: repeat(2, 1fr); /* 2 sütun */
+  gap: 10px; /* Biletler arasındaki boşluk */
+}
+
+.ticket {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 800px; /* Genişlik sınırı */
+  margin: 20px auto; /* Merkezleme */
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15); /* Hafif bir gölge eklendi */
+  border-radius: 12px; /* Hafif yuvarlatılmış köşeler */
+  overflow: hidden;
+  transition: transform 0.3s ease-in-out;
+}
+
+.ticket:hover {
+  transform: scale(1.02);
+}
+
+.stub,
+.check {
+  box-sizing: border-box;
+}
+
+.stub {
+  background: linear-gradient(135deg, #d9534f, #c9302c); /* Gradient eklendi */
+  height: 270px;
+  width: 250px;
+  color: white;
+  padding: 20px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  /* Üçgen köşeler */
+  position: relative;
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    width: 0;
+    border-style: solid;
   }
-  
-  .ticket {
+
+  &::before {
+    top: 0;
+    right: 0;
+    border-width: 0 20px 20px 0;
+    border-color: #b52a27 transparent transparent #d9534f;
+  }
+
+  &::after {
+    bottom: 0;
+    right: 0;
+    border-width: 20px 0 0 20px;
+    border-color: transparent #b52a27 #d9534f transparent;
+  }
+
+  .top {
     display: flex;
-    justify-content: center;
     align-items: center;
-    max-width: 800px;
-    margin: 20px auto;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Kart gölgesi eklendi */
-    border-radius: 10px; /* Kart köşeleri yuvarlatıldı */
-    overflow: hidden;
-  }
-  
-  .stub, .check {
-    box-sizing: border-box;
-  }
-  
-  .stub {
-    background: #d9534f; /* Daha sıcak bir kırmızı ton */
-    height: 250px;
-    width: 250px;
-    color: white;
-    padding: 20px;
-    position: relative;
-    display: flex;
-    flex-direction: column;
     justify-content: space-between;
-  
-    /* Üçgen köşeleri */
-    &:before, &:after {
-      content: '';
-      position: absolute;
-      width: 0;
-      border-style: solid;
-    }
-    
-    &:before {
-      top: 0;
-      right: 0;
-      border-width: 0 20px 20px 0;
-      border-color: #c9302c transparent transparent #d9534f;
-    }
-    
-    &:after {
-      bottom: 0;
-      right: 0;
-      border-width: 20px 0 0 20px;
-      border-color: transparent #c9302c #d9534f transparent;
-    }
-    
-    .top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      text-transform: uppercase;
-    }
-  
-    .admit {
-      font-size: 12px;
-      letter-spacing: 2px;
-      font-weight: bold;
-    }
-  
-    .line {
-      display: block;
-      background: #fff;
-      height: 40px;
-      width: 3px;
-      margin: 0 10px;
-    }
-  
-    .num {
-      font-size: 14px;
-      span {
-        display: block;
-        color: #fff;
-        font-weight: bold;
-        margin-top: 5px;
-      }
-    }
-  
-    .number {
-      position: absolute;
-      left: 40px;
-      bottom: 20px;
-      font-size: 140px;
-      font-weight: bold;
-      opacity: 0.1; /* Şeffaf büyük numara */
-    }
-  
-    .invite {
-      position: absolute;
-      left: 140px;
-      bottom: 20px;
-      color: #fff;
-      font-size: 14px;
-      font-weight: bold;
-      text-transform: uppercase;
-      width: 30%;
-      
-      &:before {
-        content: '';
-        background: #fff;
-        display: block;
-        width: 50px;
-        height: 3px;
-        margin-bottom: 8px;
-      }
-    }
+    text-transform: uppercase;
   }
-  
-  .check {
+
+  .admit {
+    font-size: 12px;
+    letter-spacing: 2px;
+    font-weight: bold;
+  }
+
+  .line {
+    display: block;
     background: #fff;
-    height: 250px;
-    width: 450px;
-    padding: 40px;
-    position: relative;
+    height: 40px;
+    width: 3px;
+    margin: 0 10px;
+  }
+
+  .num {
+    font-size: 14px;
+  }
+
+  .number {
+    position: absolute;
+    left: 40px;
+    bottom: 20px;
+    font-size: 140px;
+    font-weight: bold;
+    opacity: 0.1; /* Şeffaf büyük numara */
+  }
+
+  .invite {
+    position: absolute;
+    left: 140px;
+    bottom: 20px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+    width: 30%;
+
+    &::before {
+      content: "";
+      background: #fff;
+      display: block;
+      width: 50px;
+      height: 3px;
+      margin-bottom: 8px;
+    }
+  }
+}
+
+.check {
+  background: #fff;
+  height: 270px;
+  width: 450px;
+  padding: 40px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  /* Üçgen köşeler */
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    width: 0;
+    border-style: solid;
+  }
+
+  &::before {
+    top: 0;
+    left: 0;
+    border-width: 0 0 20px 20px;
+    border-color: transparent transparent #d9534f #fff;
+  }
+
+  &::after {
+    bottom: 0;
+    left: 0;
+    border-width: 20px 20px 0 0;
+    border-color: #d9534f transparent transparent #fff;
+  }
+
+  .big {
+    font-size: 60px;
+    font-weight: 900;
+    color: #d9534f;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+
+  .number {
+    position: absolute;
+    top: 40px;
+    right: 30px;
+    color: #d9534f;
+    font-size: 40px;
+    font-weight: bold;
+  }
+
+  .info {
     display: flex;
-    flex-direction: column;
     justify-content: space-between;
-  
-    /* Üçgen köşeleri */
-    &:before, &:after {
-      content: '';
-      position: absolute;
-      width: 0;
-      border-style: solid;
-    }
-    
-    &:before {
-      top: 0;
-      left: 0;
-      border-width: 0 0 20px 20px;
-      border-color: transparent transparent #d9534f #fff;
-    }
-    
-    &:after {
-      bottom: 0;
-      left: 0;
-      border-width: 20px 20px 0 0;
-      border-color: #d9534f transparent transparent #fff;
-    }
-  
-    .big {
-      font-size: 60px;
-      font-weight: 900;
-      color: #d9534f;
-      text-transform: uppercase;
-      line-height: 1;
-    }
-  
-    .number {
-      position: absolute;
-      top: 40px;
-      right: 30px;
-      color: #d9534f;
-      font-size: 40px;
-      font-weight: bold;
-    }
-  
-    .info {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 20px;
-      font-size: 12px;
-      
-      section {
-        margin-right: 50px;
-        
-        &:before {
-          content: '';
-          background: #d9534f;
-          display: block;
-          width: 40px;
-          height: 3px;
-          margin-bottom: 5px;
-        }
-  
-        .title {
-          font-size: 12px;
-          font-weight: bold;
-          text-transform: uppercase;
-          margin-bottom: 5px;
-        }
+    margin-top: 20px;
+    font-size: 12px;
+
+    section {
+      margin-right: 50px;
+
+      &::before {
+        content: "";
+        background: #d9534f;
+        display: block;
+        width: 40px;
+        height: 3px;
+        margin-bottom: 5px;
+      }
+
+      .title {
+        font-size: 12px;
+        font-weight: bold;
+        text-transform: uppercase;
+        margin-bottom: 5px;
       }
     }
   }
-  
+}

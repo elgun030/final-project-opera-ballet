@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom"; // useNavigate'yi içe aktar
 import ballerinaImages from "../../assets/school.png";
 import "./loading.css";
 
+
 const Products = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -53,7 +54,7 @@ const Products = () => {
           <div
             key={product._id}
             className="w-[277px] drop-shadow-2xl transition-transform transform hover:scale-105 rounded-lg"
-            onClick={() => navigate(`/products/${product._id}`)} // Ürüne tıklayınca yönlendirme
+            onClick={() => navigate(`/DetailPage/${product._id}`)} 
           >
             <div>
               <img

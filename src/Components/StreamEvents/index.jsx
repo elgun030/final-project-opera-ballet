@@ -1,59 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
-import EventsImage from "../../assets/Events.svg";
-
-const events = [
-  {
-    id: 1,
-    title: "ROYAL OPERA HOUSE - TOURS",
-    subtitle: "BEHIND THE SCENES TOUR",
-    date: "12 APRIL - 21 JULY 2024",
-    description:
-      "Take a look in the areas that are normally off-limits to the public, including rehearsal studios, costumes and production workshops.",
-    image: EventsImage,
-  },
-  {
-    id: 2,
-    title: "ROYAL OPERA HOUSE - TOURS",
-    subtitle: "BEHIND THE SCENES TOUR",
-    date: "12 APRIL - 21 JULY 2024",
-    description:
-      "Take a look in the areas that are normally off-limits to the public, including rehearsal studios, costumes and production workshops.",
-    image: EventsImage,
-  },
-  {
-    id: 3,
-    title: "ROYAL OPERA HOUSE - TOURS",
-    subtitle: "BEHIND THE SCENES TOUR",
-    date: "12 APRIL - 21 JULY 2024",
-    description:
-      "Take a look in the areas that are normally off-limits to the public, including rehearsal studios, costumes and production workshops.",
-    image: EventsImage,
-  },
-  {
-    id: 4,
-    title: "ROYAL OPERA HOUSE - TOURS",
-    subtitle: "BEHIND THE SCENES TOUR",
-    date: "12 APRIL - 21 JULY 2024",
-    description:
-      "Take a look in the areas that are normally off-limits to the public, including rehearsal studios, costumes and production workshops.",
-    image: EventsImage,
-  },
-  {
-    id: 5,
-    title: "ROYAL OPERA HOUSE - TOURS",
-    subtitle: "BEHIND THE SCENES TOUR",
-    date: "12 APRIL - 21 JULY 2024",
-    description:
-      "Take a look in the areas that are normally off-limits to the public, including rehearsal studios, costumes and production workshops.",
-    image: EventsImage,
-  },
-];
+import EventsImage from "../../assets/Events.svg"; // Placeholder image if necessary
 
 const StreamEvents = () => {
+  const [events, setEvents] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const response = await fetch("http://localhost:8000/streams");
+        const data = await response.json();
+        // Filter events for "most watched"
+        const mostWatched = data.filter(event => event.mostWatched);
+        setEvents(mostWatched);
+      } catch (error) {
+        console.error("Error fetching events:", error);
+      }
+    };
+
+    fetchEvents();
+  }, []);
 
   const nextSlide = () => {
     setCurrentIndex((prevIndex) =>
@@ -109,14 +78,14 @@ const StreamEvents = () => {
             {events.map((event, index) => (
               <div key={index} className="w-[33.33%] flex-shrink-0 px-2">
                 <div className="mb-[19px]">
-                  <img src={event.image} alt={event.title} />
+                  <img src={event.image || EventsImage} alt={event.title} />
                 </div>
                 <div className="flex flex-col gap-2 mb-2">
                   <h2 className="font-normal text-lg leading-[20.57px]">
-                    {event.title}
+                    {event.name}
                   </h2>
                   <p className="font-semibold text-[22px] leading-[26.63px]">
-                    {event.subtitle}
+                    {event.category}
                   </p>
                 </div>
                 <div>
@@ -124,7 +93,7 @@ const StreamEvents = () => {
                     {event.date}
                   </p>
                   <h2 className="font-normal text-base leading-[19.36px] mb-[29px] mt-2">
-                    {event.description}
+                    {event.subtitle}
                   </h2>
                   <button
                     className="mt-4 w-[203.4px] h-[47.54px] bg-[#C8102E] text-white font-bold text-lg leading-[17.14px] rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-300"
@@ -146,7 +115,7 @@ const StreamEvents = () => {
               onClick={(e) => e.stopPropagation()}>
               <h2 className="font-semibold text-xl">{selectedEvent?.title}</h2>
               <img
-                src={selectedEvent?.image}
+                src={selectedEvent?.image || EventsImage}
                 alt={selectedEvent?.title}
                 className="mb-4 w-full rounded-lg"
               />
