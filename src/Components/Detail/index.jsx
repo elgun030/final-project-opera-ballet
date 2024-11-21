@@ -1,21 +1,34 @@
 import React, { useEffect, useState } from "react";
-import productsImage from "../../assets/school.png"; 
+import productsImage from "../../assets/school.png";
 import { FaMinus } from "react-icons/fa6";
 import { FaPlus } from "react-icons/fa6";
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
 import { useParams } from "react-router-dom";
 import "../../Components/Products/loading.css";
-import ballerinaImages from "../../assets/school.png"; 
-
+import ballerinaImages from "../../assets/school.png";
+import { cartStore } from "../../Store/cartStore.js";
 
 const Detail = () => {
-  const { id } = useParams(); 
+  const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [events, setEvents] = useState([]);
-  const [quantity, setQuantity] = useState(1); // Ürün miktarını saklayacak state
+  const [quantity, setQuantity] = useState(1);
+
+  const addToCart = cartStore((state) => state.addToCart);
+  const userId = localStorage.getItem("userId");
+
+  const incrementHandler = () => {
+    setQuantity(quantity + 1);
+  };
+
+  const decrementHandler = () => {
+    if (quantity > 1) {
+      setQuantity(quantity - 1);
+    }
+  };
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -38,27 +51,27 @@ const Detail = () => {
       }
     };
 
-    const fetchEvents = async () => {
-      try {
-        const response = await fetch(`http://localhost:8000/events`);
-        if (!response.ok) {
-          throw new Error("Son görüntülenen ürünler alınamadı.");
-        }
-        const data = await response.json();
-        setEvents(data);
-      } catch (err) {
-        setError(err.message);
-      }
-    };
-
     fetchProduct();
-    fetchEvents();
   }, [id]);
 
-  const addToBasket = () => {
-    // Sepete ürün ekleme fonksiyonu
-    dispatch(addToCart({ product, quantity }));
-    alert(`${product.name} sepete eklendi!`); // Kullanıcıya bilgi ver
+  const handleAddToCart = () => {
+    if (!userId) {
+      console.error("Kullanıcı ID'si mevcut değil.");
+      return;
+    }
+
+    if (product) {
+      const newItem = {
+        userId,
+        productId: product._id,
+        quantity,
+      };
+
+      console.log("Gönderilen veri:", newItem);
+      addToCart(newItem);
+    } else {
+      console.error("Ürün bilgisi mevcut değil.");
+    }
   };
 
   const nextSlide = () => {
@@ -99,14 +112,18 @@ const Detail = () => {
   }
 
   if (!product) {
-    return <div>Ürün bulunamadı.</div>;
+    return <div>No product found.</div>;
   }
 
   return (
     <div className="container max-w-[1224px] m-auto">
       <div className="flex items-center gap-[60px]">
         <div className="border border-gray-300 rounded-lg p-4 shadow-md">
-          <img src={product.image} alt={product.name} className="w-full h-[500px] object-cover" />
+          <img
+            src={product.image}
+            alt={product.name}
+            className="w-full h-[500px] object-cover"
+          />
         </div>
 
         <div>
@@ -119,28 +136,31 @@ const Detail = () => {
             </p>
           </div>
           <div>
-            <p className="font-medium text-xl leading-[22.9px] text-[#262626] mb-[16px]">
+            <p className="font-medium text-xl leading-[22.9px] text-white mb-[16px]">
               Quantity
             </p>
             <div className="flex mb-[20px]">
-              <div className="w-[40px] h-[40px] flex items-center text-center bg-[#D9D9D9] justify-center cursor-pointer" onClick={() => setQuantity((prev) => Math.max(prev - 1, 1))}>
+              <div
+                className="w-[40px] h-[40px] flex items-center text-center bg-black text-white border justify-center cursor-pointer"
+                onClick={decrementHandler}>
                 <FaMinus />
               </div>
-              <div className="border w-[80px] h-[40px] flex items-center text-center justify-center ">
-                <p className="font-medium text-[32.36px] leading-[39.16px] text-[#262626] font-gotham">
+              <div className="border w-[80px] h-[40px] bg-gray-400 flex items-center text-center justify-center ">
+                <p className="font-medium text-[32.36px] leading-[39.16px] text-white font-gotham">
                   {quantity}
                 </p>
               </div>
-              <div className="w-[40px] h-[40px] flex items-center text-center bg-[#D9D9D9] justify-center cursor-pointer" onClick={() => setQuantity((prev) => prev + 1)}>
+              <div
+                className="w-[40px] h-[40px] flex items-center text-center bg-black text-white border justify-center cursor-pointer"
+                onClick={incrementHandler}>
                 <FaPlus />
               </div>
             </div>
           </div>
           <div>
-            <button 
+            <button
               className="w-[277px] border-2 border-[#C8102E] text-[#C8102E] h-[59px] hover:bg-[#C8102E] hover:text-white"
-              onClick={addToBasket} // Sepete ekleme işlemi
-            >
+              onClick={handleAddToCart}>
               Add to basket
             </button>
           </div>
@@ -169,13 +189,22 @@ const Detail = () => {
 
           <div className="overflow-hidden">
             <div
-              className="flex transition-transform duration-700 ease-in-out"
-              style={{ transform: `translateX(-${(currentIndex) * (100 / 3)}%)` }}>
+              className="flex transition-transform  duration-700 ease-in-out"
+              style={{
+                transform: `translateX(-${currentIndex * (100 / 3)}%)`,
+              }}>
               {events.map((event, index) => (
-                <div key={index} className="w-[33.33%] flex-shrink-0 px-2" onClick={() => handleEventClick(index)}>
-                  <img src={event.image} alt={event.title} className="mb-[19px]" />
-                  <div className="flex flex-col gap-2 mb-2">
-                    <h2 className="font-normal text-lg leading-[20.57px]">
+                <div
+                  key={index}
+                  className="w-[33.33%] flex-shrink-0 px-2"
+                  onClick={() => handleEventClick(index)}>
+                  <img
+                    src={event.image}
+                    alt={event.title}
+                    className="mb-[19px]"
+                  />
+                  <div className="flex flex-col gap-2 mb-2 text-white">
+                    <h2 className="font-normal text-lg  text-white leading-[20.57px]">
                       {event.title}
                     </h2>
                     <p className="font-semibold text-[22px] leading-[26.63px]">

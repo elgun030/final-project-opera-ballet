@@ -1,7 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { Accordion, AccordionHeader, AccordionBody } from "@material-tailwind/react";
-import ballerinaImages from "../../assets/school.png"; // Balerin resmi
-import "./../Products/loading.css"; // CSS dosyası
+import React, { useEffect, useState } from "react";
+import {
+  Accordion,
+  AccordionHeader,
+  AccordionBody,
+} from "@material-tailwind/react";
+import ballerinaImages from "../../assets/school.png";
+import "./../Products/loading.css";
 
 const CUSTOM_ANIMATION = {
   mount: { scale: 1 },
@@ -10,30 +14,29 @@ const CUSTOM_ANIMATION = {
 
 const Faq = () => {
   const [faqData, setFaqData] = useState([]);
-  const [loading, setLoading] = useState(true); // Loading durumu
+  const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(0);
 
   const fetchFaqs = async () => {
     try {
-      const response = await fetch('http://localhost:8000/faqs'); // API uç noktası
+      const response = await fetch("http://localhost:8000/faqs");
       if (!response.ok) {
-        throw new Error('FAQ verileri alınamadı');
+        throw new Error("Failed to retrieve FAQ data");
       }
       const data = await response.json();
       setFaqData(data);
     } catch (error) {
-      console.error('Error fetching FAQs:', error);
-      alert('FAQ verilerini alırken bir hata oluştu.');
+      console.error("Error fetching FAQs:", error);
+      alert("An error occurred while retrieving FAQ data.");
     } finally {
-      // Yükleme tamamlandıktan sonra 2 saniye bekle
       setTimeout(() => {
         setLoading(false);
-      }, 1000); // 2 saniyelik gecikme
+      }, 1000);
     }
   };
 
   useEffect(() => {
-    fetchFaqs(); // Bileşen yüklendiğinde FAQ'ları çek
+    fetchFaqs();
   }, []);
 
   const handleOpen = (value) => setOpen(open === value ? 0 : value);
@@ -50,26 +53,24 @@ const Faq = () => {
   }
 
   return (
-    <div className="flex bg-white text-black p-6 max-w-6xl mx-auto mt-8 rounded-lg shadow-lg space-x-10">
+    <div className="flex bg-black text-white p-6 max-w-6xl mx-auto mt-8 rounded-lg shadow-lg space-x-10">
       <div className="w-full">
         <h2 className="text-4xl font-bold mb-10">Frequently Asked Questions</h2>
         {faqData.map((item, index) => (
-          <Accordion 
-            key={index} 
-            open={open === index + 1} 
+          <Accordion
+            key={index}
+            open={open === index + 1}
             animate={CUSTOM_ANIMATION}
             className="mb-2 rounded-lg border border-gray-300 px-6"
-            style={{ minHeight: "50px", padding: "20px" }} 
-          >
+            style={{ minHeight: "50px", padding: "20px" }}>
             <AccordionHeader
               onClick={() => handleOpen(index + 1)}
               className={`border-b-0 text-xl transition-colors ${
                 open === index + 1 ? "text-blue-500 hover:!text-blue-700" : ""
-              }`}
-            >
+              }`}>
               {item.question}
             </AccordionHeader>
-            <AccordionBody className="pt-0 text-lg font-normal text-gray-700">
+            <AccordionBody className="pt-0 text-lg font-normal text-white">
               {item.answer}
             </AccordionBody>
           </Accordion>

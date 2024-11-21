@@ -10,7 +10,9 @@ const StreamEvents2 = () => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await fetch("http://localhost:8000/choreographerEvents");
+        const response = await fetch(
+          "http://localhost:8000/choreographerEvents"
+        );
         const data = await response.json();
         setEvents(data);
       } catch (error) {
@@ -68,7 +70,7 @@ const StreamEvents2 = () => {
           </div>
         </div>
 
-        <div className="overflow-hidden">
+        <div className="overflow-hidden bg-black text-white">
           <div
             className="flex transition-transform duration-700 ease-in-out"
             style={{ transform: `translateX(-${currentIndex * 33.33}%)` }}>
@@ -86,7 +88,6 @@ const StreamEvents2 = () => {
                   </p>
                 </div>
                 <div>
-                 
                   <h2 className="font-normal text-base leading-[19.36px] mb-[29px] mt-2">
                     {event.description}
                   </h2>
@@ -103,10 +104,10 @@ const StreamEvents2 = () => {
 
         {isModalOpen && (
           <div
-            className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+            className="fixed inset-0 flex items-center justify-center text-white bg-black bg-opacity-50 z-50"
             onClick={closeModal}>
             <div
-              className="bg-white p-4 rounded-lg w-[90%] max-w-[600px]"
+              className="text-white p-4 rounded-lg bg-black w-[90%] max-w-[600px]"
               onClick={(e) => e.stopPropagation()}>
               <h2 className="font-semibold text-xl">{selectedEvent?.title}</h2>
               <img
@@ -120,12 +121,7 @@ const StreamEvents2 = () => {
 
               <div className="flex justify-between mt-4">
                 <button
-                  className="w-[48%] h-[47.54px] border text-black font-bold text-lg rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-300"
-                  onClick={handleBuyTicketClick}>
-                  Buy Ticket
-                </button>
-                <button
-                  className="w-[48%] h-[47.54px] border text-black font-bold text-lg rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-300"
+                  className="w-[48%] h-[47.54px] border text-white font-bold text-lg rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-300"
                   onClick={closeModal}>
                   Close
                 </button>

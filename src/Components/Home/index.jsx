@@ -5,6 +5,7 @@ import Section2 from './Section2'
 import Events from './Events'
 import Section3 from './Section3'
 import Events2 from '../Events2'
+import "../../App.css"
 
 
 

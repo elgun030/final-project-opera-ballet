@@ -13,8 +13,7 @@ const StreamEvents = () => {
       try {
         const response = await fetch("http://localhost:8000/streams");
         const data = await response.json();
-        // Filter events for "most watched"
-        const mostWatched = data.filter(event => event.mostWatched);
+        const mostWatched = data.filter((event) => event.mostWatched);
         setEvents(mostWatched);
       } catch (error) {
         console.error("Error fetching events:", error);

@@ -1,12 +1,16 @@
-import React from 'react'
-import SignIn from '../../SignIn'
+import React, { useState } from 'react';
+import SignIn from '../../SignIn';
+import AdminSignIn from '../../AdminSignIn';
 
 const SignInPage = () => {
+  const [isAdminSignedIn, setIsAdminSignedIn] = useState(false);
+
   return (
     <div>
-        <SignIn/>
+      {!isAdminSignedIn && <SignIn />}
+      {isAdminSignedIn && <AdminSignIn setIsAdminSignedIn={setIsAdminSignedIn} />}
     </div>
-  )
-}
+  );
+};
 
-export default SignInPage
+export default SignInPage;

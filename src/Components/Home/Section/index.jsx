@@ -17,7 +17,6 @@ const images = [
     date: "20 - 30 JUNE 2024",
     description: "An overview of the other performance description here.",
   },
-
 ];
 
 const Section = () => {
@@ -68,7 +67,6 @@ const Section = () => {
         </button>
       </div>
 
-      {/* Chevron ikonları */}
       <div
         className="absolute top-1/2 left-4 transform -translate-y-1/2 -translate-x-1/2 text-white rounded-full bg-black cursor-pointer p-3 hover:bg-opacity-70 transition duration-300"
         onClick={prevSlide}>
@@ -80,7 +78,6 @@ const Section = () => {
         <MdChevronRight size={36} />
       </div>
 
-      {/* Daireler ile aktif slide göstergesi */}
       <div className="absolute bottom-5 left-1/2 transform -translate-x-1/2 flex space-x-2">
         {images.map((_, index) => (
           <div

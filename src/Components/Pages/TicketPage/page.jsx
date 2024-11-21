@@ -1,12 +1,10 @@
 import React from 'react'
-import Tickets from '../../Tickets'
+import Movies from "../../Tickets/index"
 
 const TicketPage = () => {
   return (
     <div>
-        <Tickets
-         
-        />
+      <Movies/>
     </div>
   )
 }

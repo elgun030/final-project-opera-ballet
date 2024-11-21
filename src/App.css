@@ -1,18 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Judson:wght@400;700&display=swap');
 
-/* Tüm sayfa genelinde 'Inter' yazı tipini uygulamak için */
-/* body {
-    font-family: 'Inter', sans-serif;
-} */
-
 .custom-font {
     font-family: 'Inter', sans-serif;
+
 }
+
 body, #root, .App {
     margin: 0;
     padding: 0;
     overflow-x: hidden; 
     font-family: 'Inter', sans-serif;
-
-  }
-  
+    background: #000;
+    color: white;
+    
+}

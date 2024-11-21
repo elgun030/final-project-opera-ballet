@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
-import EventsImage from "../../../assets/Events.svg"; // Keep this if you need a fallback image
+import EventsImage from "../../../assets/Events.svg";
 
 const Events = () => {
   const [events, setEvents] = useState([]);
@@ -13,12 +13,12 @@ const Events = () => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await fetch("http://localhost:8000/events");
+        const response = await fetch("http://localhost:8000/movie");
         if (!response.ok) {
           throw new Error("Failed to fetch events");
         }
         const data = await response.json();
-        setEvents(data); // Assuming the API returns an array of events
+        setEvents(data);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -73,14 +73,12 @@ const Events = () => {
           <div className="flex">
             <div
               className="border bg-[#F0F0F0] text-black items-center flex text-center px-2.5 cursor-pointer"
-              onClick={prevSlide}
-            >
+              onClick={prevSlide}>
               <MdChevronLeft className="w-[24px] h-[24px]" />
             </div>
             <div
               className="border bg-[#F0F0F0] text-black items-center flex text-center px-2.5 cursor-pointer"
-              onClick={nextSlide}
-            >
+              onClick={nextSlide}>
               <MdChevronRight className="w-[24px] h-[24px]" />
             </div>
           </div>
@@ -89,10 +87,11 @@ const Events = () => {
         <div className="overflow-hidden">
           <div
             className="flex transition-transform duration-700 ease-in-out"
-            style={{ transform: `translateX(-${currentIndex * 33.33}%)` }}
-          >
+            style={{ transform: `translateX(-${currentIndex * 33.33}%)` }}>
             {events.map((event, index) => (
-              <div key={event.id} className="w-[33.33%] flex-shrink-0 px-2">
+              <div
+                key={event.id || index}
+                className="w-[33.33%] flex-shrink-0 px-2">
                 <div className="mb-[19px]">
                   <img src={event.image || EventsImage} alt={event.title} />
                 </div>
@@ -106,7 +105,7 @@ const Events = () => {
                 </div>
                 <div>
                   <p className="font-medium text-lg mb-2 leading-[20.57px]">
-                    {  event.date}
+                    {event.date}
                   </p>
                   <h2 className="font-normal text-lg leading-[20.57px]">
                     {event.description}
@@ -117,8 +116,7 @@ const Events = () => {
                   </h2>
                   <button
                     className="mt-4 w-[203.4px] h-[47.54px] bg-[#C8102E] text-white font-bold text-lg leading-[17.14px] rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-300"
-                    onClick={() => handleMoreInfoClick(event)}
-                  >
+                    onClick={() => handleMoreInfoClick(event)}>
                     More info
                   </button>
                 </div>
@@ -130,12 +128,10 @@ const Events = () => {
         {isModalOpen && (
           <div
             className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
-            onClick={closeModal}
-          >
+            onClick={closeModal}>
             <div
               className="bg-white p-4 rounded-lg w-[90%] max-w-[600px]"
-              onClick={(e) => e.stopPropagation()}
-            >
+              onClick={(e) => e.stopPropagation()}>
               <h2 className="font-semibold text-xl">{selectedEvent?.title}</h2>
               <img
                 src={selectedEvent?.image}
@@ -150,14 +146,12 @@ const Events = () => {
               <div className="flex justify-between mt-4">
                 <button
                   className="w-[48%] h-[47.54px] border text-black font-bold text-lg rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-300"
-                  onClick={handleBuyTicketClick}
-                >
+                  onClick={handleBuyTicketClick}>
                   Buy Ticket
                 </button>
                 <button
                   className="w-[48%] h-[47.54px] border text-black font-bold text-lg rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-300"
-                  onClick={closeModal}
-                >
+                  onClick={closeModal}>
                   Close
                 </button>
               </div>

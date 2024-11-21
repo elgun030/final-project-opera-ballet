@@ -1,80 +1,164 @@
-import React from "react";
-import image from "../../assets/Frame 199.svg";
-import Navbar from "../../assets/SwanLake_keyring_5000x 1.svg";
-
+import React, { useEffect, useState } from "react";
+import { cartStore } from "../../Store/cartStore.js";
 
 const Basket = () => {
+  const { cart, cartFetch, deleteCartItem, updateCartItem } = cartStore();
+  const [localCart, setLocalCart] = useState([]);
+  const userId = localStorage.getItem("userId");
+
+  useEffect(() => {
+    if (userId) {
+      fetchCartItems();
+    } else {
+      setLocalCart([]);
+    }
+  }, [userId]);
+
+  useEffect(() => {
+    if (cart && cart.length > 0) {
+      setLocalCart(cart);
+      localStorage.setItem("cart", JSON.stringify(cart));
+    }
+  }, [cart]);
+
+  useEffect(() => {
+    const storedCart = localStorage.getItem("cart");
+    if (storedCart) {
+      setLocalCart(JSON.parse(storedCart));
+    }
+  }, []);
+
+  const fetchCartItems = async () => {
+    try {
+      console.log("Fetching cart items for userId:", userId);
+      await cartFetch(userId);
+    } catch (error) {
+      console.error("Error fetching cart items:", error.message);
+    }
+  };
+
+  const handleIncrement = (productId) => {
+    updateCartQuantity(productId, 1);
+  };
+
+  const handleDecrement = (productId) => {
+    updateCartQuantity(productId, -1);
+  };
+
+  const updateCartQuantity = (productId, change) => {
+    const updatedCart = [...localCart];
+    const currentItem = updatedCart.find(
+      (item) => item.productId._id === productId
+    );
+
+    if (currentItem) {
+      const newQuantity = currentItem.quantity + change;
+      if (newQuantity > 0) {
+        currentItem.quantity = newQuantity;
+        setLocalCart(updatedCart);
+        if (userId) updateCartItem(productId, newQuantity, userId);
+      } else {
+        handleRemoveItem(productId);
+      }
+    }
+  };
+
+  const handleRemoveItem = (productId) => {
+    const updatedCart = localCart.filter(
+      (item) => item.productId._id !== productId
+    );
+    setLocalCart(updatedCart);
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
+
+    if (userId) {
+      deleteCartItem(productId, userId);
+    }
+  };
+
+  const calculateTotal = () => {
+    return localCart
+      .reduce(
+        (acc, item) =>
+          item.productId?.price
+            ? acc + item.productId.price * item.quantity
+            : acc,
+        0
+      )
+      .toFixed(2);
+  };
+
   return (
-    <div className="container max-w-[1200px] mx-auto p-8 bg-white rounded-lg shadow-lg flex flex-col lg:flex-row items-center lg:items-start lg:justify-between gap-8">
-      {/* Giriş ve Kayıt Alanı */}
-      <div className="max-w-[558px] w-full border border-gray-300 rounded-lg shadow p-8 text-center">
-        <div className="mt-4">
-          <h2 className="font-semibold text-2xl mb-4 font-gotham">
-            Sign in or create an account
-          </h2>
-          <p className="font-medium text-lg text-gray-600 mb-8">
-            Enter your email to sign in or create an account
+    <div className="container max-w-[1200px] mx-auto p-8 rounded-lg shadow-lg bg-gray-900 text-white overflow-y-auto">
+      <div className="bg-gradient-to-r from-gray-800 via-gray-900 to-gray-800 rounded-lg p-8 shadow-xl">
+        {localCart.length > 0 ? (
+          localCart.map((item, index) => {
+            if (!item.productId || !item.productId._id) {
+              return (
+                <div key={index} className="text-center text-red-500">
+                  Product information is missing.
+                </div>
+              );
+            }
+
+            return (
+              <div
+                key={index}
+                className="flex justify-between items-center mb-6 p-4 bg-gray-800 rounded-lg shadow-lg hover:shadow-gray-700 transition-shadow duration-300">
+                <div className="relative">
+                  <img
+                    src={item.productId?.image || "default_image.jpg"}
+                    alt={item.productId?.name || "Product"}
+                    className="h-auto max-w-[80px] rounded-md border-2 border-gray-700"
+                  />
+                  <span className="absolute -top-2 right-2 bg-gray-700 text-gray-200 text-xs font-semibold rounded-full w-6 h-6 flex items-center justify-center shadow-md">
+                    {item.quantity}
+                  </span>
+                </div>
+
+                <div className="flex-1 ml-6">
+                  <h2 className="text-lg font-semibold text-gray-100">
+                    {item.productId?.name || "Unknown Product"}
+                  </h2>
+                  <div className="flex items-center mt-2">
+                    <button
+                      className="px-3 py-1 bg-gray-700 text-gray-200 rounded-md shadow-md hover:bg-gray-600 transition duration-200"
+                      onClick={() => handleDecrement(item.productId._id)}>
+                      -
+                    </button>
+                    <span className="mx-4 text-lg">{item.quantity}</span>
+                    <button
+                      className="px-3 py-1 bg-gray-700 text-gray-200 rounded-md shadow-md hover:bg-gray-600 transition duration-200"
+                      onClick={() => handleIncrement(item.productId._id)}>
+                      +
+                    </button>
+                  </div>
+                </div>
+
+                <div className="text-right">
+                  <p className="text-lg font-semibold text-gray-100">
+                    £{(item.productId?.price * item.quantity).toFixed(2)}
+                  </p>
+                  <button
+                    className="text-sm mt-2 text-red-500 hover:text-red-400 transition duration-200 hover:underline"
+                    onClick={() => handleRemoveItem(item.productId._id)}>
+                    Remove
+                  </button>
+                </div>
+              </div>
+            );
+          })
+        ) : (
+          <p className="text-center text-gray-400">Your cart is empty.</p>
+        )}
+
+        <div className="flex justify-between items-center mt-8 pt-4 border-t border-gray-700">
+          <h2 className="font-bold text-xl text-gray-100">Total</h2>
+          <p className="text-xl font-extrabold text-white">
+            £{calculateTotal()}
           </p>
         </div>
-        <div className="mb-6">
-          <input
-            className="w-full h-14 border-2 border-gray-300 rounded-lg px-5 text-black focus:outline-none focus:border-indigo-500"
-            type="email"
-            placeholder="Email"
-          />
-        </div>
-        <button className="bg-indigo-600 hover:bg-indigo-700 text-white w-full h-14 rounded-lg flex items-center justify-center transition duration-200">
-          <img src={image} alt="Continue with Service" className="h-6" />
-        </button>
-      </div>
 
-      {/* Sepet Özeti */}
-      <div className="max-w-[578px] w-full bg-gray-100 rounded-lg shadow p-8 flex flex-col justify-between">
-        <div>
-          {/* Ürün Detayları */}
-          <div className="flex justify-between items-center mb-4 relative">
-            <div className="relative">
-              <img src={Navbar} alt="Basket Overview" className="h-auto" />
-              <span className="absolute -top-2 right-1 bg-indigo-600 text-white text-xs font-semibold rounded-full w-6 h-6 flex items-center justify-center">
-                1
-              </span>
-            </div>
-            <div className="flex flex-col items-start">
-              <h2 className="font-normal text-sm ml-2.5 leading-[17px]">
-                Swan Lake Limited Edition Keyring (2024)
-              </h2>
-              <div className="flex items-center ml-2.5 gap-2 mt-2">
-                <button className="bg-gray-200 text-black px-2 py-1 rounded-lg">-</button>
-                <span className="font-medium text-lg">1</span>
-                <button className="bg-gray-200 text-black px-2 py-1 rounded-lg">+</button>
-              </div>
-            </div>
-            <div className="flex flex-col items-end">
-              <p className="font-normal text-sm leading-[17px]">£13.00</p>
-              <button className="bg-red-500 text-white px-4 py-2 mt-2 rounded-lg text-xs font-semibold hover:bg-red-600 transition">
-                Remove
-              </button>
-            </div>
-          </div>
-
-          {/* Alt Toplam */}
-          <div className="flex justify-between mb-8 mt-8">
-            <h2 className="font-normal text-sm leading-[17px]">Subtotal</h2>
-            <p className="font-medium text-sm leading-[17px]">£26.00</p>
-          </div>
-        </div>
-
-        {/* Toplam Fiyat */}
-        <div className="border-t border-gray-300 pt-6 mt-6 flex justify-between items-center">
-          <h2 className="font-semibold font-gotham text-[21.06px] leading-[25.49px]">Total</h2>
-          <div className="flex items-center gap-[11px]">
-            <h3 className="font-normal text-xs leading-[14.06px] text-[#757575]">GBP</h3>
-            <p className="font-semibold font-gotham text-[21.06px] leading-[25.49px]">£26.00</p>
-          </div>
-        </div>
-
-        {/* Onayla Butonu */}
-        <button className="bg-indigo-600 hover:bg-indigo-700 text-white w-full h-14 mt-10 rounded-lg flex items-center justify-center transition duration-200">
+        <button className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-500 hover:to-pink-500 text-white w-full h-14 mt-6 rounded-lg shadow-lg font-semibold text-lg transition-transform duration-300 transform hover:scale-105">
           Confirm Order
         </button>
       </div>

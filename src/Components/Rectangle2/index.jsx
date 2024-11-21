@@ -29,25 +29,26 @@ const Rectangle2 = () => {
   };
 
   const prevSlide = () => {
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + images.length) % images.length);
+    setCurrentIndex(
+      (prevIndex) => (prevIndex - 1 + images.length) % images.length
+    );
   };
 
   const openModal = () => {
-    setVideo(images[currentIndex]?.video); // video URL'sini ilgili indeksten al
+    setVideo(images[currentIndex]?.video);
     setIsModalOpen(true);
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
-    setVideo(""); // Modal kapandığında video URL'sini sıfırla
+    setVideo("");
   };
 
   return (
     <div className="relative container max-w-[1440px] m-auto overflow-hidden">
       <div
         className="relative flex transition-transform duration-1000 ease-in-out"
-        style={{ transform: `translateX(-${currentIndex * 100}%)` }}
-      >
+        style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
         {images.map((image, index) => (
           <div key={index} className="w-full flex-shrink-0 relative group">
             <img
@@ -77,59 +78,59 @@ const Rectangle2 = () => {
           </button>
           <button
             className="w-[196px] border ml-[26px] border-white h-[47.54px]"
-            onClick={openModal} // Modal açma işlevi
-          >
+            onClick={openModal}>
             Watch trailer
           </button>
         </div>
       </div>
 
-      {/* Chevron ikonları */}
       <div
         className="absolute top-1/2 left-4 transform -translate-y-1/2 -translate-x-1/2 text-white rounded-full bg-black cursor-pointer p-3 hover:bg-opacity-70 transition duration-300"
-        onClick={prevSlide}
-      >
+        onClick={prevSlide}>
         <MdChevronLeft className="w-[36px] h-[36px]" />
       </div>
       <div
         className="absolute top-1/2 right-4 transform -translate-y-1/2 translate-x-1/2 text-white rounded-full bg-black cursor-pointer p-3 hover:bg-opacity-70 transition duration-300"
-        onClick={nextSlide}
-      >
+        onClick={nextSlide}>
         <MdChevronRight size={36} />
       </div>
 
-      {/* Daireler ile aktif slide göstergesi */}
       <div className="absolute bottom-5 left-1/2 transform -translate-x-1/2 flex space-x-2">
         {images.map((_, index) => (
           <div
             key={index}
             className={`w-3 h-3 rounded-full cursor-pointer transition-all duration-300 ${
-              currentIndex === index ? "bg-white scale-125" : "bg-gray-400 scale-100"
+              currentIndex === index
+                ? "bg-white scale-125"
+                : "bg-gray-400 scale-100"
             }`}
             onClick={() => setCurrentIndex(index)}
           />
         ))}
       </div>
 
-      {/* Modal Bileşeni */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70" onClick={closeModal}>
-          <div className="bg-white p-4 rounded-lg relative w-[80%] max-w-[800px]" onClick={(e) => e.stopPropagation()}> {/* Modal boyutu burada ayarlandı */}
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70"
+          onClick={closeModal}>
+          <div
+            className="bg-black p-4 rounded-lg relative w-[80%] max-w-[800px]"
+            onClick={(e) => e.stopPropagation()}>
+            {" "}
+            {/* Modal boyutu burada ayarlandı */}
             <button
               className="absolute top-2 right-2 text-lg font-bold"
-              onClick={closeModal}
-            >
+              onClick={closeModal}>
               X
             </button>
             <iframe
-              width="100%" // Genişlik %100 yapıldı
-              height="450" // Yükseklik artırıldı
+              width="100%"
+              height="450"
               src={video}
               title="Video Trailer"
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            ></iframe>
+              allowFullScreen></iframe>
           </div>
         </div>
       )}
@@ -137,4 +138,4 @@ const Rectangle2 = () => {
   );
 };
 
-export default Rectangle2; 
+export default Rectangle2;
