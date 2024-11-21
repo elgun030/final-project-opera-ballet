@@ -33,14 +33,14 @@ const Detail = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       if (!id) {
-        setError("Ürün ID'si geçersiz.");
+        setError("The product ID is invalid.");
         setLoading(false);
         return;
       }
       try {
         const response = await fetch(`http://localhost:8000/products/${id}`);
         if (!response.ok) {
-          throw new Error("Ürün detayı alınamadı.");
+          throw new Error("Product details could not be retrieved.");
         }
         const data = await response.json();
         setProduct(data);
@@ -56,7 +56,7 @@ const Detail = () => {
 
   const handleAddToCart = () => {
     if (!userId) {
-      console.error("Kullanıcı ID'si mevcut değil.");
+      console.error("User ID not available.");
       return;
     }
 
@@ -67,10 +67,10 @@ const Detail = () => {
         quantity,
       };
 
-      console.log("Gönderilen veri:", newItem);
+      console.log("Sent data:", newItem);
       addToCart(newItem);
     } else {
-      console.error("Ürün bilgisi mevcut değil.");
+      console.error("Product information not available.");
     }
   };
 
