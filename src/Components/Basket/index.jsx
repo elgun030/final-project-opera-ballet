@@ -4,6 +4,7 @@ import { cartStore } from "../../Store/cartStore.js";
 const Basket = () => {
   const { cart, cartFetch, deleteCartItem, updateCartItem } = cartStore();
   const [localCart, setLocalCart] = useState([]);
+  const [totalItems, setTotalItems] = useState(0); 
   const userId = localStorage.getItem("userId");
 
   useEffect(() => {
@@ -27,6 +28,16 @@ const Basket = () => {
       setLocalCart(JSON.parse(storedCart));
     }
   }, []);
+
+  // localCart değiştiğinde totalItems'ı güncelle
+  useEffect(() => {
+    const calculateTotalItems = () => {
+      const total = localCart.reduce((acc, item) => acc + item.quantity, 0);
+      setTotalItems(total);
+    };
+
+    calculateTotalItems();
+  }, [localCart]);
 
   const fetchCartItems = async () => {
     try {
@@ -63,15 +74,20 @@ const Basket = () => {
     }
   };
 
-  const handleRemoveItem = (productId) => {
+  const handleRemoveItem = async (productId) => {
     const updatedCart = localCart.filter(
       (item) => item.productId._id !== productId
     );
-    setLocalCart(updatedCart);
-    localStorage.setItem("cart", JSON.stringify(updatedCart));
 
-    if (userId) {
-      deleteCartItem(productId, userId);
+    try {
+      if (userId) {
+        await deleteCartItem(productId, userId);
+      }
+
+      setLocalCart(updatedCart);
+      localStorage.setItem("cart", JSON.stringify(updatedCart));
+    } catch (error) {
+      console.error("Error deleting cart item:", error.message);
     }
   };
 
@@ -157,6 +173,8 @@ const Basket = () => {
             £{calculateTotal()}
           </p>
         </div>
+
+        <p className="mt-2 text-sm text-gray-400">Total Items: {totalItems}</p>
 
         <button className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-500 hover:to-pink-500 text-white w-full h-14 mt-6 rounded-lg shadow-lg font-semibold text-lg transition-transform duration-300 transform hover:scale-105">
           Confirm Order

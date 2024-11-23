@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { MdChevronLeft, MdChevronRight } from "react-icons/md";
+import Slider from "react-slick";
 
 const StreamEvents2 = () => {
   const [events, setEvents] = useState([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
 
@@ -23,18 +22,6 @@ const StreamEvents2 = () => {
     fetchEvents();
   }, []);
 
-  const nextSlide = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex === events.length - 3 ? 0 : prevIndex + 1
-    );
-  };
-
-  const prevSlide = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex === 0 ? events.length - 3 : prevIndex - 1
-    );
-  };
-
   const handleMoreInfoClick = (event) => {
     setSelectedEvent(event);
     setIsModalOpen(true);
@@ -48,6 +35,27 @@ const StreamEvents2 = () => {
   const handleBuyTicketClick = () => {
     alert("Ticket purchase functionality goes here.");
   };
+  const sliderSettings = {
+    dots: true,
+    infinite: false,
+    speed: 500,
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 2,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 1,
+        },
+      },
+    ],
+  };
 
   return (
     <div className="mt-[57.57px]">
@@ -56,51 +64,35 @@ const StreamEvents2 = () => {
           <div className="font-thin text-[32px] leading-[30.62px] font-gotham">
             <h2>Women in ballet: Female choreographers</h2>
           </div>
-          <div className="flex">
-            <div
-              className="border bg-[#F0F0F0] text-black items-center flex text-center px-2.5 cursor-pointer"
-              onClick={prevSlide}>
-              <MdChevronLeft className="w-[24px] h-[24px]" />
-            </div>
-            <div
-              className="border bg-[#F0F0F0] text-black items-center flex text-center px-2.5 cursor-pointer"
-              onClick={nextSlide}>
-              <MdChevronRight className="w-[24px] h-[24px]" />
-            </div>
-          </div>
         </div>
 
-        <div className="overflow-hidden bg-black text-white">
-          <div
-            className="flex transition-transform duration-700 ease-in-out"
-            style={{ transform: `translateX(-${currentIndex * 33.33}%)` }}>
-            {events.map((event, index) => (
-              <div key={index} className="w-[33.33%] flex-shrink-0 px-2">
-                <div className="mb-[19px]">
-                  <img src={event.image} alt={event.title} />
-                </div>
-                <div className="flex flex-col gap-2 mb-2">
-                  <h2 className="font-normal text-lg leading-[20.57px]">
-                    {event.title}
-                  </h2>
-                  <p className="font-semibold text-[22px] leading-[26.63px]">
-                    {event.choreographer}
-                  </p>
-                </div>
-                <div>
-                  <h2 className="font-normal text-base leading-[19.36px] mb-[29px] mt-2">
-                    {event.description}
-                  </h2>
-                  <button
-                    className="mt-4 w-[203.4px] h-[47.54px] bg-[#C8102E] text-white font-bold text-lg leading-[17.14px] rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-300"
-                    onClick={() => handleMoreInfoClick(event)}>
-                    More info
-                  </button>
-                </div>
+        <Slider {...sliderSettings}>
+          {events.map((event, index) => (
+            <div key={index} className="px-2">
+              <div className="mb-[19px]">
+                <img src={event.image} alt={event.title} />
               </div>
-            ))}
-          </div>
-        </div>
+              <div className="flex flex-col gap-2 mb-2">
+                <h2 className="font-normal text-lg leading-[20.57px]">
+                  {event.title}
+                </h2>
+                <p className="font-semibold text-[22px] leading-[26.63px]">
+                  {event.choreographer}
+                </p>
+              </div>
+              <div>
+                <h2 className="font-normal text-base leading-[19.36px] mb-[29px] mt-2">
+                  {event.description}
+                </h2>
+                <button
+                  className="mt-4 w-[203.4px] h-[47.54px] bg-[#C8102E] text-white font-bold text-lg leading-[17.14px] rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-300"
+                  onClick={() => handleMoreInfoClick(event)}>
+                  More info
+                </button>
+              </div>
+            </div>
+          ))}
+        </Slider>
 
         {isModalOpen && (
           <div

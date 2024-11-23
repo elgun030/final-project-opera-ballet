@@ -18,6 +18,8 @@ import AdminSignPage from "./Components/Pages/AdminSignPage/page";
 import LearningPage from "./Components/Pages/LearningPage/page";
 import GalleryPage from "./Components/Pages/GalleryPage/page";
 import MovieDetailPage from "./Components/Pages/TicketDetailPage/page";
+import ResetPassPage from "./Components/Pages/ResetPassPage/page";
+import NewPasswordPage from "./Components/Pages/NewPasswordPage/page";
 
 const App = () => {
   return (
@@ -39,6 +41,8 @@ const App = () => {
         <Route path="/CardPage" element={<><Helmet><title>Card Page</title></Helmet><Header /><CardPage /></>} />
         <Route path="/GalleryPage" element={<><Helmet><title>Gallery Page </title></Helmet><Header /><GalleryPage /></>} />
         <Route path="/MovieDetailPage/:eventId" element={<><Helmet><title>MovieDetailPage </title></Helmet><Header /><MovieDetailPage /></>} />
+        <Route path="/ResetPassPage" element={<><Helmet><title>ResetPassPage </title></Helmet><Header /><ResetPassPage /></>} />
+        <Route path="/NewPasswordPage" element={<><Helmet><title>NewPasswordPage </title></Helmet><Header /><NewPasswordPage /></>} />
       </Routes>
 
       <Footer />

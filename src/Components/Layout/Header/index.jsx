@@ -13,18 +13,14 @@ const Header = () => {
   const [showModal, setShowModal] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const navigate = useNavigate();
-  const [totalItems, setTotalItems] = useState(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const { getTotalItems } = cartStore();
+  const { cart, clearCart } = cartStore(); // clearCart fonksiyonunu alıyoruz
+  const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
-
-  useEffect(() => {
-    setTotalItems(getTotalItems());
-  }, [getTotalItems]);
 
   useEffect(() => {
     const checkLoginStatus = () => {
@@ -46,14 +42,17 @@ const Header = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("userName");
     localStorage.removeItem("userId");
-    localStorage.removeItem("cart"); 
-    setIsLoggedIn(false); 
-    setIsAdmin(false); 
-    setShowModal(true); 
+    localStorage.removeItem("cart");
+
+    clearCart();
+
+    setIsLoggedIn(false);
+    setIsAdmin(false);
+    setShowModal(true);
 
     setTimeout(() => {
-      setShowModal(false); 
-      navigate("/SignInPage"); 
+      setShowModal(false);
+      navigate("/SignInPage");
     }, 2000);
   };
 
@@ -63,11 +62,6 @@ const Header = () => {
 
   return (
     <div className="w-full h-[132px] flex items-center justify-center bg-black shadow-lg">
-      <label className="relative inline-flex items-center cursor-pointer">
-        <input type="checkbox" className="sr-only peer" defaultValue="" />
-        <div className="group peer bg-white rounded-full duration-300 w-16 h-8 ring-2 ring-red-500 after:duration-300 after:bg-red-500 peer-checked:after:bg-green-500 peer-checked:ring-green-500 after:rounded-full after:absolute after:h-6 after:w-6 after:top-1 after:left-1 after:flex after:justify-center after:items-center peer-checked:after:translate-x-8 peer-hover:after:scale-95" />
-      </label>
-
       <div className="container max-w-[1226.36px] mx-auto flex items-center justify-between">
         <Link to="/">
           <img src={HomeLogo} alt="HomeLogo" className="h-10" />
@@ -108,9 +102,6 @@ const Header = () => {
             <>
               <Link to="/MessagesPage" className="relative">
                 <FaRegBell className="text-[30px]" />
-                <span className="absolute -top-2 -right-2 bg-indigo-600 text-white text-xs font-semibold rounded-full w-5 h-5 flex items-center justify-center">
-                  1
-                </span>
               </Link>
 
               <Link to="/BasketPage" className="relative">
@@ -130,24 +121,12 @@ const Header = () => {
               <FiUser className="text-[30px]" />
             </Link>
           )}
-          <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="text-[30px] block sm:hidden">
+          <button onClick={toggleMenu} className="text-[30px] block sm:hidden">
             <GiHamburgerMenu />
           </button>
 
           {isMenuOpen && (
-            <div
-              className="menu sm:hidden fixed top-[70px] right-4 w-60 sticky bg-white text-black shadow-xl rounded-lg z-50"
-              style={{
-                height: "auto", 
-                width: "250px", 
-                borderRadius: "8px", 
-                padding: "10px 0", 
-                position: "fixed", 
-                top: "70px", 
-                right: "4px", 
-              }}>
+            <div className="menu sm:hidden fixed top-[70px] right-4 w-60 bg-white text-black shadow-xl rounded-lg z-50">
               <ul className="text-sm font-semibold">
                 <li className="hover:bg-indigo-500 hover:text-white transition-all duration-300 ease-in-out">
                   <Link

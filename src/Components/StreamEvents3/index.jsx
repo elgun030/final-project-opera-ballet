@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { MdChevronLeft, MdChevronRight } from "react-icons/md";
+import Slider from "react-slick";
 
 const StreamEvents3 = () => {
   const [events, setEvents] = useState([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
 
@@ -21,22 +20,6 @@ const StreamEvents3 = () => {
     fetchEvents();
   }, []);
 
-  const nextSlide = () => {
-    if (events.length >= 4) {
-      setCurrentIndex((prevIndex) =>
-        prevIndex === events.length - 3 ? 0 : prevIndex + 1
-      );
-    }
-  };
-
-  const prevSlide = () => {
-    if (events.length >= 4) {
-      setCurrentIndex((prevIndex) =>
-        prevIndex === 0 ? events.length - 3 : prevIndex - 1
-      );
-    }
-  };
-
   const handleMoreInfoClick = (event) => {
     setSelectedEvent(event);
     setIsModalOpen(true);
@@ -47,17 +30,35 @@ const StreamEvents3 = () => {
     setSelectedEvent(null);
   };
 
-  const handleBuyTicketClick = () => {
-    alert("Ticket purchase functionality goes here.");
-  };
-
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     if (isNaN(date)) {
-      return "Geçersiz Tarih";
+      return "Invalid date";
     }
     const options = { year: "numeric", month: "long", day: "numeric" };
     return date.toLocaleDateString("en-EN", options);
+  };
+
+  const sliderSettings = {
+    dots: true,
+    infinite: false,
+    speed: 500,
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 2,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 1,
+        },
+      },
+    ],
   };
 
   return (
@@ -67,32 +68,12 @@ const StreamEvents3 = () => {
           <div className="font-thin text-[32px] leading-[30.62px] uppercase font-gotham">
             <h2>Actors</h2>
           </div>
-          <div className="flex">
-            <div
-              className={`border bg-[#F0F0F0] text-black items-center flex text-center px-2.5 cursor-pointer ${
-                events.length < 4 ? "opacity-50 cursor-not-allowed" : ""
-              }`}
-              onClick={prevSlide}
-              disabled={events.length < 4}>
-              <MdChevronLeft className="w-[24px] h-[24px]" />
-            </div>
-            <div
-              className={`border bg-[#F0F0F0] text-black items-center flex text-center px-2.5 cursor-pointer ${
-                events.length < 4 ? "opacity-50 cursor-not-allowed" : ""
-              }`}
-              onClick={nextSlide}
-              disabled={events.length < 4}>
-              <MdChevronRight className="w-[24px] h-[24px]" />
-            </div>
-          </div>
         </div>
 
         <div className="overflow-hidden">
-          <div
-            className="flex transition-transform duration-700 ease-in-out"
-            style={{ transform: `translateX(-${currentIndex * 33.33}%)` }}>
+          <Slider {...sliderSettings}>
             {events.map((event, index) => (
-              <div key={index} className="w-[33.33%] flex-shrink-0 px-2">
+              <div key={index} className="px-2">
                 <div className="mb-[19px]">
                   <img src={event.image} alt={event.title} />
                 </div>
@@ -119,7 +100,7 @@ const StreamEvents3 = () => {
                 </div>
               </div>
             ))}
-          </div>
+          </Slider>
         </div>
 
         {isModalOpen && (

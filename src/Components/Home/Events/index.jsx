@@ -1,14 +1,22 @@
 import React, { useEffect, useState } from "react";
+import Slider from "react-slick";
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
 import EventsImage from "../../../assets/Events.svg";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 const Events = () => {
   const [events, setEvents] = useState([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const options = { year: "numeric", month: "short", day: "numeric" };
+    return date.toLocaleDateString("en-GB", options).replace(",", "");
+  };
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -29,18 +37,6 @@ const Events = () => {
     fetchEvents();
   }, []);
 
-  const nextSlide = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex === events.length - 3 ? 0 : prevIndex + 1
-    );
-  };
-
-  const prevSlide = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex === 0 ? events.length - 3 : prevIndex - 1
-    );
-  };
-
   const handleMoreInfoClick = (event) => {
     setSelectedEvent(event);
     setIsModalOpen(true);
@@ -53,6 +49,28 @@ const Events = () => {
 
   const handleBuyTicketClick = () => {
     alert("Ticket purchase functionality goes here.");
+  };
+
+  const sliderSettings = {
+    dots: true,
+    infinite: false,
+    speed: 500,
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 2,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 1,
+        },
+      },
+    ],
   };
 
   if (loading) {
@@ -70,61 +88,42 @@ const Events = () => {
           <div className="font-normal text-[32px] leading-[30.62px] font-gotham">
             <h2>Other events</h2>
           </div>
-          <div className="flex">
-            <div
-              className="border bg-[#F0F0F0] text-black items-center flex text-center px-2.5 cursor-pointer"
-              onClick={prevSlide}>
-              <MdChevronLeft className="w-[24px] h-[24px]" />
-            </div>
-            <div
-              className="border bg-[#F0F0F0] text-black items-center flex text-center px-2.5 cursor-pointer"
-              onClick={nextSlide}>
-              <MdChevronRight className="w-[24px] h-[24px]" />
-            </div>
-          </div>
         </div>
 
-        <div className="overflow-hidden">
-          <div
-            className="flex transition-transform duration-700 ease-in-out"
-            style={{ transform: `translateX(-${currentIndex * 33.33}%)` }}>
-            {events.map((event, index) => (
-              <div
-                key={event.id || index}
-                className="w-[33.33%] flex-shrink-0 px-2">
-                <div className="mb-[19px]">
-                  <img src={event.image || EventsImage} alt={event.title} />
-                </div>
-                <div className="flex flex-col gap-2 mb-2">
-                  <h2 className="font-normal text-lg leading-[20.57px]">
-                    {event.name}
-                  </h2>
-                  <p className="font-semibold text-[22px] leading-[26.63px]">
-                    {event.category}
-                  </p>
-                </div>
-                <div>
-                  <p className="font-medium text-lg mb-2 leading-[20.57px]">
-                    {event.date}
-                  </p>
-                  <h2 className="font-normal text-lg leading-[20.57px]">
-                    {event.description}
-                  </h2>
-
-                  <h2 className="font-normal text-base leading-[19.36px] mb-[29px] mt-2">
-                    {/* {event.description} */}
-                  </h2>
-                  <button
-                    className="mt-4 w-[203.4px] h-[47.54px] bg-[#C8102E] text-white font-bold text-lg leading-[17.14px] rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-300"
-                    onClick={() => handleMoreInfoClick(event)}>
-                    More info
-                  </button>
-                </div>
+        <Slider {...sliderSettings}>
+          {events.map((event, index) => (
+            <div key={event.id || index} className="px-2">
+              <div className="mb-[19px]">
+                <img src={event.image || EventsImage} alt={event.title} />
               </div>
-            ))}
-          </div>
-        </div>
+              <div className="flex flex-col gap-2 mb-2">
+                <h2 className="font-normal text-lg leading-[20.57px]">
+                  {event.name}
+                </h2>
+                <p className="font-semibold text-[22px] leading-[26.63px]">
+                  {event.category}
+                </p>
+              </div>
+              <div>
+                <p className="font-medium text-lg mb-2 leading-[20.57px]">
+                  {formatDate(event.date)}
+                </p>
+                <h2 className="font-normal text-lg leading-[20.57px]">
+                  {event.description}
+                </h2>
 
+                <h2 className="font-normal text-base leading-[19.36px] mb-[29px] mt-2"></h2>
+                <button
+                  className="mt-4 w-[203.4px] h-[47.54px] bg-[#C8102E] text-white font-bold text-lg leading-[17.14px] rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-300"
+                  onClick={() => handleMoreInfoClick(event)}>
+                  More info
+                </button>
+              </div>
+            </div>
+          ))}
+        </Slider>
+
+        {/* Modal */}
         {isModalOpen && (
           <div
             className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"

@@ -35,7 +35,7 @@ const MovieDetail = () => {
   }, [eventId, userId]);
 
   const toggleSeatSelection = (seatNumber) => {
-    const maxSeats = 5; // Kullanıcının seçebileceği maksimum koltuk sayısı
+    const maxSeats = 5;
 
     if (selectedSeats.includes(seatNumber)) {
       setSelectedSeats(selectedSeats.filter((seat) => seat !== seatNumber));
@@ -72,8 +72,8 @@ const MovieDetail = () => {
       setMessage(
         `Successfully booked: ${response.data.successfullyBooked.join(", ")}`
       );
-      setSelectedSeats([]); // Seçimleri temizle
-      setQuantity(1); // Miktarı sıfırla
+      setSelectedSeats([]);
+      setQuantity(1); 
     } catch (error) {
       if (error.response) {
         console.error("Error response from server:", error.response.data);
@@ -108,7 +108,7 @@ const MovieDetail = () => {
         ))}
       </div>
       <form onSubmit={handleSubmit}>
-        <div className="mb-4">
+        {/* <div className="mb-4">
           <label className="block text-lg font-medium mb-2">Quantity:</label>
           <input
             type="number"
@@ -118,7 +118,7 @@ const MovieDetail = () => {
             className="w-full p-2 border text-black border-gray-300 rounded-md"
             required
           />
-        </div>
+        </div> */}
         <button
           type="submit"
           className="w-full py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600">

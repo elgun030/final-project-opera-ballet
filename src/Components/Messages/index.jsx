@@ -4,7 +4,7 @@ import axios from "axios";
 const Messages = () => {
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
-  const userId = localStorage.getItem("userId"); // Kullanıcının ID'sini almak için localStorage kullanılıyor
+  const userId = localStorage.getItem("userId");
 
   useEffect(() => {
     if (!userId) {
@@ -12,7 +12,6 @@ const Messages = () => {
       return;
     }
 
-    // Kullanıcının booking'lerini almak için API çağrısı
     const fetchBookings = async () => {
       try {
         const response = await axios.get(
@@ -20,10 +19,8 @@ const Messages = () => {
         );
         const bookings = response.data.bookings;
 
-        // Gelen booking verilerini messages formatına çevirme
         const transformedMessages = bookings.map((booking) => {
           if (!booking.eventId) {
-            // Eğer eventId yoksa hata mesajı ekleyebiliriz
             return {
               id: booking._id,
               type: "ticket",
@@ -34,15 +31,27 @@ const Messages = () => {
           return {
             id: booking._id,
             type: "ticket",
-            content: `Your ticket for the event "${
-              booking.eventId.name
-            }" has been successfully booked. Event Date: ${new Date(
-              booking.eventId.date
-            ).toLocaleDateString()}, Price: $${
-              booking.eventId.price
-            }, Seat Number: ${booking.seatNumber}, Quantity: ${
-              booking.quantity
-            }.`,
+            content: (
+              <>
+                Your ticket for the event{" "}
+                <span className="font-bold text-black">
+                  "{booking.eventId.name}"
+                </span>{" "}
+                has been{" "}
+                <span className="font-bold text-green-500">
+                  successfully booked
+                </span>
+                . Event Date:{" "}
+                <span className="font-bold">
+                  {new Date(booking.eventId.date).toLocaleDateString()}
+                </span>
+                , Price:{" "}
+                <span className="font-bold">{booking.eventId.price}₼</span>,
+                Seat Number:{" "}
+                <span className="font-bold">{booking.seatNumber}</span>,
+                Quantity: <span className="font-bold">{booking.quantity}</span>.
+              </>
+            ),
           };
         });
 
@@ -62,7 +71,6 @@ const Messages = () => {
       await axios.delete(
         `http://localhost:8000/booking/${userId}/bookings/${id}`
       );
-      // Başarılı silme sonrası mesajı listeden çıkar
       setMessages(messages.filter((message) => message.id !== id));
     } catch (error) {
       console.error("Error deleting booking:", error);

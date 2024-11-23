@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
+import Slider from "react-slick"; // Slick Carousel bileşenini içe aktar
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
-import EventsImage from "../../assets/Events.svg"; // Placeholder image if necessary
+import EventsImage from "../../assets/Events.svg"; // Gerekirse yer tutucu resim
 
 const StreamEvents = () => {
   const [events, setEvents] = useState([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
 
@@ -13,27 +13,15 @@ const StreamEvents = () => {
       try {
         const response = await fetch("http://localhost:8000/streams");
         const data = await response.json();
-        const mostWatched = data.filter((event) => event.mostWatched);
+        const mostWatched = data.filter(event => event.mostWatched);
         setEvents(mostWatched);
       } catch (error) {
-        console.error("Error fetching events:", error);
+        console.error("Eventleri alırken hata oluştu:", error);
       }
     };
 
     fetchEvents();
   }, []);
-
-  const nextSlide = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex === events.length - 3 ? 0 : prevIndex + 1
-    );
-  };
-
-  const prevSlide = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex === 0 ? events.length - 3 : prevIndex - 1
-    );
-  };
 
   const handleMoreInfoClick = (event) => {
     setSelectedEvent(event);
@@ -46,64 +34,64 @@ const StreamEvents = () => {
   };
 
   const handleBuyTicketClick = () => {
-    alert("Ticket purchase functionality goes here.");
+    alert("Bilet satın alma fonksiyonu buraya gelecek.");
   };
+
+  const sliderSettings = {
+    dots: true, 
+    infinite: false, 
+    speed: 500, 
+    slidesToShow: 3, 
+    slidesToScroll: 1,
+    responsive: [
+      {
+        breakpoint: 1024, 
+        settings: {
+          slidesToShow: 2, 
+        },
+      },
+      {
+        breakpoint: 600, 
+        settings: {
+          slidesToShow: 1,
+        },
+      },
+    ],
+  };
+
 
   return (
     <div className="mt-[57.57px]">
       <div className="container max-w-[1280px] m-auto">
         <div className="flex justify-between mb-[40px]">
           <div className="font-thin text-[32px] leading-[30.62px] font-gotham">
-            <h2>Most watched</h2>
-          </div>
-          <div className="flex">
-            <div
-              className="border bg-[#F0F0F0] text-black items-center flex text-center px-2.5 cursor-pointer"
-              onClick={prevSlide}>
-              <MdChevronLeft className="w-[24px] h-[24px]" />
-            </div>
-            <div
-              className="border bg-[#F0F0F0] text-black items-center flex text-center px-2.5 cursor-pointer"
-              onClick={nextSlide}>
-              <MdChevronRight className="w-[24px] h-[24px]" />
-            </div>
+            <h2>En Çok İzlenenler</h2>
           </div>
         </div>
 
-        <div className="overflow-hidden">
-          <div
-            className="flex transition-transform duration-700 ease-in-out"
-            style={{ transform: `translateX(-${currentIndex * 33.33}%)` }}>
-            {events.map((event, index) => (
-              <div key={index} className="w-[33.33%] flex-shrink-0 px-2">
-                <div className="mb-[19px]">
-                  <img src={event.image || EventsImage} alt={event.title} />
-                </div>
-                <div className="flex flex-col gap-2 mb-2">
-                  <h2 className="font-normal text-lg leading-[20.57px]">
-                    {event.name}
-                  </h2>
-                  <p className="font-semibold text-[22px] leading-[26.63px]">
-                    {event.category}
-                  </p>
-                </div>
-                <div>
-                  <p className="font-medium text-lg leading-[20.57px]">
-                    {event.date}
-                  </p>
-                  <h2 className="font-normal text-base leading-[19.36px] mb-[29px] mt-2">
-                    {event.subtitle}
-                  </h2>
-                  <button
-                    className="mt-4 w-[203.4px] h-[47.54px] bg-[#C8102E] text-white font-bold text-lg leading-[17.14px] rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-300"
-                    onClick={() => handleMoreInfoClick(event)}>
-                    More info
-                  </button>
-                </div>
+        {/* Slick Carousel */}
+        <Slider {...sliderSettings}>
+          {events.map((event, index) => (
+            <div key={index} className="px-2">
+              <div className="mb-[19px]">
+                <img src={event.image || EventsImage} alt={event.title} />
               </div>
-            ))}
-          </div>
-        </div>
+              <div className="flex flex-col gap-2 mb-2">
+                <h2 className="font-normal text-lg leading-[20.57px]">{event.name}</h2>
+                <p className="font-semibold text-[22px] leading-[26.63px]">{event.category}</p>
+              </div>
+              <div>
+                <p className="font-medium text-lg leading-[20.57px]">{event.date}</p>
+                <h2 className="font-normal text-base leading-[19.36px] mb-[29px] mt-2">{event.subtitle}</h2>
+                <button
+                  className="mt-4 w-[203.4px] h-[47.54px] bg-[#C8102E] text-white font-bold text-lg leading-[17.14px] rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-300"
+                  onClick={() => handleMoreInfoClick(event)}>
+                  Daha Fazla Bilgi
+                </button>
+              </div>
+            </div>
+          ))}
+        </Slider>
 
         {isModalOpen && (
           <div
@@ -119,20 +107,18 @@ const StreamEvents = () => {
                 className="mb-4 w-full rounded-lg"
               />
               <p className="font-medium text-lg">{selectedEvent?.date}</p>
-              <p className="font-normal text-lg">
-                {selectedEvent?.description}
-              </p>
+              <p className="font-normal text-lg">{selectedEvent?.description}</p>
 
               <div className="flex justify-between mt-4">
                 <button
                   className="w-[48%] h-[47.54px] border text-black font-bold text-lg rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-300"
                   onClick={handleBuyTicketClick}>
-                  Buy Ticket
+                  Bilet Al
                 </button>
                 <button
-                  className="w-[48%] h-[47.54px]  border text-black font-bold text-lg rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-300"
+                  className="w-[48%] h-[47.54px] border text-black font-bold text-lg rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-300"
                   onClick={closeModal}>
-                  Close
+                  Kapat
                 </button>
               </div>
             </div>
