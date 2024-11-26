@@ -70,7 +70,6 @@ const SignUp = () => {
       return;
     }
 
-    // Profil resmi URL'si oluşturma
     const profilePicURL = `https://avatar.iran.liara.run/username?username=${fullName.replace(
       " ",
       "+"
@@ -173,7 +172,6 @@ const SignUp = () => {
           )}
         </div>
 
-        {/* Email */}
         <div className="w-full">
           <label className="text-gray-500 text-sm" htmlFor="email">
             Email
@@ -197,7 +195,6 @@ const SignUp = () => {
           )}
         </div>
 
-        {/* Password */}
         <div className="w-full">
           <label className="text-gray-500 text-sm" htmlFor="password">
             Password

@@ -1,16 +1,13 @@
 import { create } from "zustand";
 
 export const cartStore = create((set) => ({
-  cart: JSON.parse(localStorage.getItem("cart")) || [], // LocalStorage'dan sepeti al
-  userId: null, // Kullanıcı ID'si
+  cart: JSON.parse(localStorage.getItem("cart")) || [],
+  userId: null,
 
-  // Kullanıcı ID'sini ayarlamak için fonksiyon
   setUserId: (userId) => set({ userId }),
 
-  // Sepeti ayarlamak için fonksiyon
   setCart: (cart) => set({ cart }),
 
-  // Sepete yeni ürün eklemek için fonksiyon
   addToCart: async (newItem) => {
     try {
       const response = await fetch("http://localhost:8000/baskets/add", {
@@ -55,7 +52,6 @@ export const cartStore = create((set) => ({
           ];
         }
 
-        // Sepeti localStorage'a kaydet
         localStorage.setItem("cart", JSON.stringify(updatedCart));
 
         return { cart: updatedCart };
@@ -65,7 +61,6 @@ export const cartStore = create((set) => ({
     }
   },
 
-  // Sepet öğesinin miktarını güncelleme fonksiyonu
   updateCartItem: async (productId, quantity) => {
     const userId = localStorage.getItem("userId");
     try {
@@ -91,7 +86,6 @@ export const cartStore = create((set) => ({
         const updatedCart = state.cart.map((item) =>
           item.productId === productId ? { ...item, quantity } : item
         );
-        // Sepeti güncelle ve localStorage'a kaydet
         localStorage.setItem("cart", JSON.stringify(updatedCart));
         return { cart: updatedCart };
       });
@@ -100,7 +94,6 @@ export const cartStore = create((set) => ({
     }
   },
 
-  // Sepet öğesini silme fonksiyonu
   deleteCartItem: async (productId) => {
     try {
       const response = await fetch(
@@ -124,7 +117,6 @@ export const cartStore = create((set) => ({
         const updatedCart = state.cart.filter(
           (item) => item.productId !== productId
         );
-        // LocalStorage'dan da sepet öğesini sil
         localStorage.setItem("cart", JSON.stringify(updatedCart));
         return { cart: updatedCart };
       });
@@ -133,7 +125,6 @@ export const cartStore = create((set) => ({
     }
   },
 
-  // Sepetteki öğelerin toplam miktarını hesaplayan fonksiyon
   getTotalItems: () => {
     const state = cartStore.getState();
     if (Array.isArray(state.cart)) {
@@ -142,7 +133,6 @@ export const cartStore = create((set) => ({
     return 0;
   },
 
-  // Kullanıcının sepetini fetch etme fonksiyonu
   cartFetch: async (userId) => {
     try {
       const response = await fetch(`http://localhost:8000/baskets/${userId}`);
@@ -156,7 +146,6 @@ export const cartStore = create((set) => ({
 
       if (Array.isArray(data.data.items)) {
         set({ cart: data.data.items });
-        // Yeni veriyi localStorage'a kaydet
         localStorage.setItem("cart", JSON.stringify(data.data.items));
       } else {
         set({ cart: [] });
@@ -167,7 +156,6 @@ export const cartStore = create((set) => ({
     }
   },
 
-  // Sepeti temizleme fonksiyonu
   clearCart: async () => {
     try {
       const userId = cartStore.getState().userId;
@@ -187,7 +175,6 @@ export const cartStore = create((set) => ({
         console.log("Cart cleared successfully");
       }
 
-      // State'i sıfırla ve localStorage'ı temizle
       set({ cart: [] });
       localStorage.removeItem("cart");
     } catch (error) {

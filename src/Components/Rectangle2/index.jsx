@@ -116,8 +116,6 @@ const Rectangle2 = () => {
           <div
             className="bg-black p-4 rounded-lg relative w-[80%] max-w-[800px]"
             onClick={(e) => e.stopPropagation()}>
-            {" "}
-            {/* Modal boyutu burada ayarlandı */}
             <button
               className="absolute top-2 right-2 text-lg font-bold"
               onClick={closeModal}>

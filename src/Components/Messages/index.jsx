@@ -67,7 +67,6 @@ const Messages = () => {
 
   const handleDelete = async (id) => {
     try {
-      // Silme isteği gönder
       await axios.delete(
         `http://localhost:8000/booking/${userId}/bookings/${id}`
       );

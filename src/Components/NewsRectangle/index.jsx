@@ -45,7 +45,6 @@ const NewsRectangle = () => {
     <div
       onMouseEnter={() => setShowButtons(true)}
       onMouseLeave={() => setShowButtons(false)}>
-      {/* Slider bileşeni */}
       <div className="relative container max-w-[1440px] bg-[#1A1A1A] m-auto overflow-hidden">
         <div
           className="relative flex transition-transform duration-1000 ease-in-out"
@@ -65,7 +64,6 @@ const NewsRectangle = () => {
           ))}
         </div>
 
-        {/* Chevron ikonları */}
         <div
           className={`absolute top-1/2 left-4 transform -translate-y-1/2 text-white rounded-full bg-black cursor-pointer p-3 transition-all duration-300 ${
             showButtons ? "opacity-100 scale-100" : "opacity-0 scale-75"

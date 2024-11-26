@@ -46,7 +46,7 @@ const Events2 = () => {
 
   const sliderSettings = {
     dots: true,
-    infinite: false, // Sonsuz döngüyü kapatıyoruz.
+    infinite: false,
     speed: 500,
     slidesToShow: 3,
     slidesToScroll: 1,
@@ -75,7 +75,6 @@ const Events2 = () => {
           </div>
         </div>
 
-        {/* Slider Component */}
         <Slider {...sliderSettings}>
           {events.map((event, index) => (
             <div
@@ -115,7 +114,6 @@ const Events2 = () => {
           ))}
         </Slider>
 
-        {/* Modal */}
         {isModalOpen && (
           <div
             className="fixed inset-0 flex items-center justify-center text-black bg-black bg-opacity-50 z-50"
@@ -138,7 +136,6 @@ const Events2 = () => {
               </h2>
 
               <div className="mt-4 flex justify-between ">
-           
                 <button
                   className="w-[48%] h-[47.54px] border text-black font-bold text-lg rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-300"
                   onClick={closeModal}>

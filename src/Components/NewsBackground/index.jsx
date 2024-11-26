@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import NewsImage from "../../assets/Rectangle 25.svg"; // Varsayılan resim
+import NewsImage from "../../assets/Rectangle 25.svg"; 
 
 const NewsBackground = () => {
   const [newsData, setNewsData] = useState([]);

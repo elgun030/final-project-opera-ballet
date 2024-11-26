@@ -5,6 +5,7 @@ const NewPassword = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const [newPassword, setNewPassword] = useState("");
+  const [username, setUsername] = useState(""); 
   const [message, setMessage] = useState("");
 
   const handleReset = async (event) => {
@@ -22,13 +23,16 @@ const NewPassword = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:8000/auth/reset-password", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ token, newPassword }),
-      });
+      const response = await fetch(
+        "http://localhost:8000/auth/reset-password",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ token, username, newPassword }),
+        }
+      );
 
       const data = await response.json();
 
@@ -59,14 +63,28 @@ const NewPassword = () => {
               message.includes("success")
                 ? "bg-green-100 text-green-600"
                 : "bg-red-100 text-red-600"
-            }`}
-          >
+            }`}>
             {message}
           </div>
         )}
         <form onSubmit={handleReset} className="space-y-4">
           <div className="w-full">
-            <label htmlFor="newPassword" className="block text-sm text-gray-500">
+            <label htmlFor="username" className="block text-sm text-gray-500">
+              Username
+            </label>
+            <input
+              type="text"
+              id="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Enter your username"
+              className="w-full p-2 border text-black border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+          <div className="w-full">
+            <label
+              htmlFor="newPassword"
+              className="block text-sm text-gray-500">
               New Password
             </label>
             <input
@@ -75,13 +93,12 @@ const NewPassword = () => {
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
               placeholder="6+ strong characters"
-              className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full p-2 border text-black border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
           <button
             type="submit"
-            className="w-full py-2 px-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all duration-150"
-          >
+            className="w-full py-2 px-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all duration-150">
             Reset Password
           </button>
         </form>

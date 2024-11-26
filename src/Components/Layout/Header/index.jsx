@@ -15,7 +15,7 @@ const Header = () => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const { cart, clearCart } = cartStore(); // clearCart fonksiyonunu alıyoruz
+  const { cart, clearCart } = cartStore();
   const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
 
   const toggleMenu = () => {

@@ -6,10 +6,8 @@ const AdminSignIn = () => {
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-  // admin giriş sayfasına yönlendirme (eğer gerekirse)
   const navigate = useNavigate();
 
-  // Admin girişi fonksiyonu
   const handleAdminLogin = async (event) => {
     event.preventDefault();
 
@@ -27,9 +25,8 @@ const AdminSignIn = () => {
         localStorage.setItem("token", data.token);
         localStorage.setItem("userName", "admin");
 
-        // Admin paneline yönlendirmek için yeni sekme açma
         const adminUrl = `http://localhost:5174/?token=${data.token}`;
-        window.open(adminUrl, "_blank"); // Yeni sekme açarak admin paneline yönlendir
+        window.open(adminUrl, "_blank");
       } else {
         setErrorMessage("Geçersiz kullanıcı adı veya şifre.");
       }

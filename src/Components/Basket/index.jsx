@@ -4,7 +4,7 @@ import { cartStore } from "../../Store/cartStore.js";
 const Basket = () => {
   const { cart, cartFetch, deleteCartItem, updateCartItem } = cartStore();
   const [localCart, setLocalCart] = useState([]);
-  const [totalItems, setTotalItems] = useState(0); 
+  const [totalItems, setTotalItems] = useState(0);
   const userId = localStorage.getItem("userId");
 
   useEffect(() => {
@@ -29,7 +29,6 @@ const Basket = () => {
     }
   }, []);
 
-  // localCart değiştiğinde totalItems'ı güncelle
   useEffect(() => {
     const calculateTotalItems = () => {
       const total = localCart.reduce((acc, item) => acc + item.quantity, 0);
