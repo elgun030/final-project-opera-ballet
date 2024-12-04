@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const FooterElem = () => {
   return (
@@ -18,9 +19,11 @@ const FooterElem = () => {
             </p>
           </div>
           <div>
-            <button className="w-[154px] h-[48px] bg-white font-semibold text-lg leading-[21.78px] text-black ">
-              Get help{" "}
-            </button>
+            <Link to='FaqPage'>
+              <button className="w-[154px] h-[48px] bg-white font-semibold text-lg leading-[21.78px] text-black ">
+                Get help{" "}
+              </button>
+            </Link>
           </div>
         </div>
       </div>

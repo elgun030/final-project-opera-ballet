@@ -87,7 +87,9 @@ const Header = () => {
           <Link to="/GalleryPage">
             <h2 className="font-medium text-xs">Gallery</h2>
           </Link>
-          <h2 className="font-medium text-xs">About</h2>
+          <Link to="/AboutPage">
+            <h2 className="font-medium text-xs">About</h2>
+          </Link>
         </div>
 
         <div className="flex gap-[20px] items-center">

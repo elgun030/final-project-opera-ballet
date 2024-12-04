@@ -20,6 +20,7 @@ import GalleryPage from "./Components/Pages/GalleryPage/page";
 import MovieDetailPage from "./Components/Pages/TicketDetailPage/page";
 import ResetPassPage from "./Components/Pages/ResetPassPage/page";
 import NewPasswordPage from "./Components/Pages/NewPasswordPage/page";
+import AboutPage from "./Components/Pages/AboutPage/page";
 
 const App = () => {
   return (
@@ -43,6 +44,7 @@ const App = () => {
         <Route path="/MovieDetailPage/:eventId" element={<><Helmet><title>MovieDetailPage </title></Helmet><Header /><MovieDetailPage /></>} />
         <Route path="/ResetPassPage" element={<><Helmet><title>ResetPassPage </title></Helmet><Header /><ResetPassPage /></>} />
         <Route path="/NewPasswordPage" element={<><Helmet><title>NewPasswordPage </title></Helmet><Header /><NewPasswordPage /></>} />
+        <Route path="/AboutPage" element={<><Helmet><title>AboutPage </title></Helmet><Header /><AboutPage /></>} />
       </Routes>
 
       <Footer />

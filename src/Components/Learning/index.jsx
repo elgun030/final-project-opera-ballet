@@ -1,29 +1,71 @@
-import React from "react";
+import React, { useState } from "react";
 import LearningImage from "../../assets/Frame 30.svg";
 import uzeyir from "../../assets/uzeyir.svg";
 import muslim from "../../assets/muslim.svg";
+import PlayButton from "../../assets/Play.svg";
+import RectangleVideo from "../../assets/Üzeyr Hacıbəylinin _Leyli və Məcnun_ operası.mp4";
+import "./learning.css";
 
 const Learning = () => {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const videoRef = React.useRef(null);
+
+  const handlePlayVideo = () => {
+    setIsPlaying(true);
+    videoRef.current.play();
+  };
+
+  const handleCloseVideo = () => {
+    setIsPlaying(false);
+    videoRef.current.pause();
+    videoRef.current.currentTime = 0;
+  };
+
   return (
     <div>
-      <div className="relative">
-        <div className="container max-w-[1440px] mx-auto">
-          <img
-            src={LearningImage}
-            alt="LearningImage"
-            className="w-full h-[703px] object-cover"
-          />
-        </div>
+      <div className="container m-auto max-w-[1440px]">
+        <div className="relative w-full h-[700px] flex justify-center items-center">
+          {!isPlaying && (
+            <>
+              <img
+                src={PlayButton}
+                alt="Play Button"
+                className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-16 h-16 sm:w-24 sm:h-24 bg-black rounded-full p-2 cursor-pointer shadow-lg z-10"
+                onClick={handlePlayVideo}
+              />
+              <img
+                src={LearningImage}
+                alt="Rectangle"
+                className="absolute top-0 left-0 w-full h-full object-cover cursor-pointer"
+                onClick={handlePlayVideo}
+              />
+            </>
+          )}
 
-        <div className="absolute inset-0 flex items-center justify-start text-white p-4 bg-black bg-opacity-50">
-          <div className="container max-w-[1226px] mx-auto">
-            <h2 className="font-medium text-sm leading-[16px] font-sf-pro text-left  sm:w-[583px] sm:h-[73px] sm:text-xl sm:leading-[30px] sm:p-2">
-              The foundation of Opera art in Azerbaijan was laid on January 12
-              (25), 1908, with the performance of "Leyli and Majnun", the first
-              opera in the Eastern and Muslim world by genius Uzeyir Hajibeyli,
-              at the H.Z. Taghiyev Theater. The theater building was built in
-              1910 by the famous builder-engineer Bayev.
-            </h2>
+          <div className="absolute w-full h-full top-0 left-0 flex justify-center items-center">
+            <video
+              ref={videoRef}
+              className={`w-full h-full object-cover ${
+                isPlaying ? "block" : "hidden"
+              }`}
+              controls
+              onPlay={() => setIsPlaying(true)}
+              style={{
+                borderRadius: "8px",
+                boxShadow: "0 4px 12px rgba(0, 0, 0, 0.2)",
+              }}
+            >
+              <source src={RectangleVideo} type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+            {isPlaying && (
+              <button
+                onClick={handleCloseVideo}
+                className="absolute top-4 right-4 bg-red-600 text-white p-2 rounded-full cursor-pointer shadow-lg"
+              >
+                ❌
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -35,7 +77,7 @@ const Learning = () => {
           </h2>
         </div>
 
-        <div className="flex flex-wrap justify-between mt-[48px] ">
+        <div className="flex flex-wrap justify-between mt-[48px]">
           {/* Uzeyir */}
           <div className="w-[472px] items-center flex flex-col mb-8">
             <div className="mb-[38px]">
@@ -54,7 +96,7 @@ const Learning = () => {
           </div>
 
           {/* Muslim */}
-          <div className="w-[472px] items-center flex flex-col mb-8 ">
+          <div className="w-[472px] items-center flex flex-col mb-8">
             <div className="mb-[38px]">
               <img src={muslim} alt="muslim" className="w-full" />
             </div>

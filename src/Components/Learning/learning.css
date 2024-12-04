@@ -1,0 +1,9 @@
+.video-container {
+    position: relative;
+    max-width: 800px; /* YouTube videosuna uyğun ölçü */
+    margin: 20px auto; /* Mərkəzləşdirmək üçün */
+    overflow: hidden; /* Çərçivədən çıxan hissələri gizlətmək */
+    border: 2px solid #ddd; /* Çərçivə */
+    border-radius: 8px; /* Küncləri yuvarlaqlaşdırmaq üçün */
+  }
+  
