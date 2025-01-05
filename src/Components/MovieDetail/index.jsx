@@ -19,7 +19,7 @@ const MovieDetail = () => {
     const fetchEventDetails = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8000/movie/${eventId}`
+          `https://final-backend-lmmo.onrender.com/movie/${eventId}`
         );
         const eventDetails = response.data;
 
@@ -65,7 +65,7 @@ const MovieDetail = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8000/booking/book",
+        "https://final-backend-lmmo.onrender.com/booking/book",
         bookingData
       );
       console.log("Booking successful:", response.data);
