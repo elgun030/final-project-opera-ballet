@@ -76,7 +76,7 @@ const SignIn = () => {
               type="userName"
               id="userName"
               ref={userNameRef}
-              placeholder="hsynmrzyv"
+              placeholder="elgngryv"
               className="absolute w-full h-full text-sm py-3 top-0 left-0 focus:outline-none bg-transparent border-b-2 border-gray-300 focus:border-lightOrange "
             />
             <CiUser

@@ -12,7 +12,7 @@ const AdminSignIn = () => {
     event.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:8000/admin/login", {
+      const response = await fetch("http://localhost:8000/auth/sign-in", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -79,7 +79,7 @@ const AdminSignIn = () => {
         <button
           type="submit"
           className="w-full bg-blue-500 text-white p-2 rounded-md">
-          Giriş Yap
+          Sign In
         </button>
       </form>
     </div>
