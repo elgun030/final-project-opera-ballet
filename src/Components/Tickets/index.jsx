@@ -18,7 +18,7 @@ const Movies = () => {
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        const response = await fetch("https://final-backend-lmmo.onrender.com/movie");
+        const response = await fetch("http://localhost:8000/movie");
         if (!response.ok) {
           throw new Error("An error occurred while retrieving movies.");
         }
