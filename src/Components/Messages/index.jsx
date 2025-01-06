@@ -70,7 +70,7 @@ const Messages = () => {
   const handleDelete = async (id) => {
     try {
       await axios.delete(
-        `${apiUrl}/${userId}/bookings/${id}`
+        `${apiUrl}/booking/${userId}/bookings/${id}`
       );
       setMessages(messages.filter((message) => message.id !== id));
     } catch (error) {
