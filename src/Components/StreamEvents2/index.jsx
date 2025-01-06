@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Slider from "react-slick";
 
+const apiUrl = import.meta.env.VITE_API_URL;
+
 const StreamEvents2 = () => {
   const [events, setEvents] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -9,9 +11,7 @@ const StreamEvents2 = () => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:8000/choreographerEvents"
-        );
+        const response = await fetch(`${apiUrl}/choreographerEvents`);
         const data = await response.json();
         setEvents(data);
       } catch (error) {

@@ -9,6 +9,8 @@ const formatDate = (dateString) => {
   return date.toLocaleDateString("en-GB", options).replace(",", "");
 };
 
+const apiUrl = import.meta.env.VITE_API_URL;
+
 const Movies = () => {
   const [movies, setMovies] = useState([]);
   const navigate = useNavigate();
@@ -18,7 +20,7 @@ const Movies = () => {
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        const response = await fetch("http://localhost:8000/movie");
+        const response = await fetch(`${apiUrl}/movie`);
         if (!response.ok) {
           throw new Error("An error occurred while retrieving movies.");
         }

@@ -12,6 +12,8 @@ const CUSTOM_ANIMATION = {
   unmount: { scale: 0.9 },
 };
 
+const apiUrl = import.meta.env.VITE_API_URL;
+
 const Faq = () => {
   const [faqData, setFaqData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -19,7 +21,7 @@ const Faq = () => {
 
   const fetchFaqs = async () => {
     try {
-      const response = await fetch("http://localhost:8000/faqs");
+      const response = await fetch(`${apiUrl}/faqs`);
       if (!response.ok) {
         throw new Error("Failed to retrieve FAQ data");
       }

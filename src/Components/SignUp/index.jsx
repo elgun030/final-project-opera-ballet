@@ -3,6 +3,8 @@ import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { useRef, useState, useEffect } from "react";
 
+const apiUrl = import.meta.env.VITE_API_URL;
+
 const SignUp = () => {
   const fullNameRef = useRef();
   const userNameRef = useRef();
@@ -86,7 +88,7 @@ const SignUp = () => {
     };
 
     try {
-      const response = await fetch("http://localhost:8000/auth/sign-up", {
+      const response = await fetch(`${apiUrl}/auth/sign-up`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
