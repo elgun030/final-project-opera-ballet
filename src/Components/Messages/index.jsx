@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
+const apiUrl = import.meta.env.VITE_API_URL;
+
 const Messages = () => {
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
@@ -15,7 +17,7 @@ const Messages = () => {
     const fetchBookings = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8000/booking/${userId}/bookings`
+          `${apiUrl}/booking/${userId}/bookings`
         );
         const bookings = response.data.bookings;
 
@@ -68,7 +70,7 @@ const Messages = () => {
   const handleDelete = async (id) => {
     try {
       await axios.delete(
-        `http://localhost:8000/booking/${userId}/bookings/${id}`
+        `${apiUrl}/${userId}/bookings/${id}`
       );
       setMessages(messages.filter((message) => message.id !== id));
     } catch (error) {

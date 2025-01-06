@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 
+const apiUrl = import.meta.env.VITE_API_URL;
+
 const MovieDetail = () => {
   const [seats, setSeats] = useState([]);
   const [selectedSeats, setSelectedSeats] = useState([]);
@@ -19,7 +21,7 @@ const MovieDetail = () => {
     const fetchEventDetails = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8000/movie/${eventId}`
+          `${apiUrl}/movie/${eventId}`
         );
         const eventDetails = response.data;
 
@@ -65,7 +67,7 @@ const MovieDetail = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8000/booking/book",
+        `${apiUrl}/booking/book`,
         bookingData
       );
       console.log("Booking successful:", response.data);
